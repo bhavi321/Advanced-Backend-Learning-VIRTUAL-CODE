@@ -1,0 +1,5 @@
+services:
+  redis:
+    image: redis
+    ports:
+      - 1005:6379
