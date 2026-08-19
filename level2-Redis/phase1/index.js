@@ -4,6 +4,7 @@ import mongoose from "mongoose";
 import Redis from "ioredis";
 import connectDB from "./lib/db.js";
 import userModel from "./models/userModel.js";
+import ratelimiter from "./middleware/middleware.js";
 
 
 const env = dotenv.config();
@@ -47,7 +48,7 @@ app.post('/create', async (req, res) => {
 })
 
 // without redis: Time: 73 ms
-app.get('/get', async (req, res) => {
+app.get('/get',ratelimiter, async (req, res) => {
     try {
         const allUsers = await userModel.find({});
         return res.status(200).send(allUsers);
@@ -78,3 +79,14 @@ app.get('/get-with-redis', async (req, res) => {
         throw error;
     }
 })
+
+app.delete('/delete-redis-keys', async (req, res) => {
+    const keys = await redis.keys("rate_limit:*");
+    console.log("keys:", keys)
+    if (keys.length) {
+    await redis.del(...keys);
+    }
+    return res.status(200).json({message: "Deleted all Keys"});
+})
+
+export default redis;
