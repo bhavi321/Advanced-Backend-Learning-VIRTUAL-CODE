@@ -1,10 +1,10 @@
 import express from "express";
 import dotenv from "dotenv";
-import mongoose from "mongoose";
 import Redis from "ioredis";
 import connectDB from "./lib/db.js";
 import userModel from "./models/userModel.js";
 import ratelimiter from "./middleware/middleware.js";
+import emailQueue from "./queue.js";
 
 
 const env = dotenv.config();
@@ -39,6 +39,7 @@ app.post('/create', async (req, res) => {
         console.log("created user:", {user, email, password})
         await redis.del("user:all");
         console.log("deleted all users from redis");
+        await emailQueue.add("send-email", email);
         return res.status(201).send({message: "created"});
     }
     catch (error) {
