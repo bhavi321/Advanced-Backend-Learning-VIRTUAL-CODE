@@ -6,5 +6,23 @@ services:
     volumes:
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf
 
-    backend:
-      
+  server1:
+    build: ./server
+    ports:
+      - 1007:7000
+    env_file:
+      - ./server/.env
+
+  # server2:
+  #   build: ./server
+  #   ports:
+  #     - 1008:7000
+  #   env_file:
+  #     - ./server/.env
+
+  # server3:
+  #   build: ./server
+  #   ports:
+  #     - 1009:7000
+  #   env_file:
+  #     - ./server/.env
