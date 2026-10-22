@@ -15,6 +15,25 @@ services:
     build: ./server
     env_file:
       - ./server/.env
+    environment:
+      SERVER_NAME: "First Server"
     ports:
       - 1008:7000
 
+  server2:
+    build: ./server
+    env_file:
+      - ./server/.env
+    environment:
+      SERVER_NAME: "Second Server"
+    ports:
+      - 1009:7000
+
+  server3:
+    build: ./server
+    env_file:
+      - ./server/.env
+    environment:
+      SERVER_NAME: "Third Server"
+    ports:
+      - 1010:7000

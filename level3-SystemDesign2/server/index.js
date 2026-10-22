@@ -25,8 +25,9 @@ async function startServer() {
 }
 startServer();
 
+const serverName = process.env.SERVER_NAME;
 app.get('/', (req, res) => {
-    return res.status(200).send({message: `Hello from server. Port: ${port}`});
+    return res.status(200).send({message: `Hello from server: ${serverName}. Port: ${port}`});
 })
 
 //without redis: Time: 166 ms
