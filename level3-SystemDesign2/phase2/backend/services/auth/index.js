@@ -12,5 +12,5 @@ app.listen(port, () => {
 })
 
 app.get("/", (req, res) => {
-    return res.status(200).json({message: "Hello from server."})
+    return res.status(200).json({message: "Hello from auth service."})
 })
