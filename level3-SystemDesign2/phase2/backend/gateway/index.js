@@ -10,13 +10,24 @@ app.use(express.json());
 
 const port = process.env.PORT || 8000;
 
+const proxyWithGatewayName = (serviceUrl) =>
+    proxy(serviceUrl, {
+        proxyReqOptDecorator: (proxyReqOpts) => {
+            delete proxyReqOpts.headers["x-gateway-name"];
+            if (process.env.SERVER_NAME) {
+                proxyReqOpts.headers["x-gateway-name"] = process.env.SERVER_NAME;
+            }
+            return proxyReqOpts;
+        },
+    });
+
 app.get("/", (req, res) => { 
-    return res.status(200).json({message: "Hello from backend or gateway"});
+    return res.status(200).json({message: `Hello from ${process.env.SERVER_NAME}`});
  })
 
-app.use("/auth", proxy(process.env.AUTH_SERVICE_URL));
-app.use("/product", proxy(process.env.PRODUCT_SERVICE_URL));
-app.use("/order", proxy(process.env.ORDER_SERVICE_URL));
+app.use("/auth", proxyWithGatewayName(process.env.AUTH_SERVICE_URL));
+app.use("/product", proxyWithGatewayName(process.env.PRODUCT_SERVICE_URL));
+app.use("/order", proxyWithGatewayName(process.env.ORDER_SERVICE_URL));
 
 app.listen(port, () => {
    console.log( `Server listening on port: ${port}`);

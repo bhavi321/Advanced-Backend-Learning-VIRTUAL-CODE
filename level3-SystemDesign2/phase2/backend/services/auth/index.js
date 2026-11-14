@@ -12,5 +12,10 @@ app.listen(port, () => {
 })
 
 app.get("/", (req, res) => {
-    return res.status(200).json({message: "Hello from auth service."})
+    const gatewayName = req.get("x-gateway-name");
+    const message = gatewayName
+        ? `Hello from ${gatewayName} and auth service.`
+        : "Hello from auth service.";
+
+    return res.status(200).json({message})
 })
