@@ -22,7 +22,7 @@ const proxyWithGatewayName = (serviceUrl) =>
     });
 
 app.get("/", (req, res) => { 
-    return res.status(200).json({message: `Hello from ${process.env.SERVER_NAME}`});
+    return res.status(200).json({message: `Helloo from ${process.env.SERVER_NAME}`});
  })
 
 app.use("/auth", proxyWithGatewayName(process.env.AUTH_SERVICE_URL));
