@@ -1,13 +1,42 @@
 import express from "express";
 import dotenv from "dotenv";
+import { GoogleGenAI } from "@google/genai";
+
 dotenv.config();
 
 const app = express();
-
-app.get('/', `Hello from backend`);
+app.use(express.json());
+app.get('/', (req, res) => {
+    return res.status(200).json({ message: "Hello from backend" });
+});
 
 const port = process.env.PORT;
 
 app.listen(port, () => {
     console.log(`Server listening on port: ${port}`);
+})
+
+const ai = new GoogleGenAI({
+    apiKey : process.env.GEMINI_API_KEY
+})
+
+async function getResponse(input) {
+    const response = await ai.interactions.create({
+        model : "gemini-3.5-flash",
+        input : input
+    });
+    // const response = await ai.models.generateContent({
+    //     model : "gemini-3.5-flash",
+    //     contents : input
+    // });
+    return response;
+}
+
+app.post('/ai', async (req, res) => {
+    const input = req.body.data;
+    console.log(req.body.data);
+    const response = await getResponse(input);
+    console.log("response: ", response);
+    console.log("response output_text", response.output_text);
+    return res.status(200).json({message: response.output_text});
 })
