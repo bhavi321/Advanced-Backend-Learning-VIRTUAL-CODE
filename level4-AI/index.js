@@ -24,6 +24,16 @@ async function getResponse(input) {
     const response = await ai.interactions.create({
         model : "gemini-3.5-flash",
         input : input
+        // input : [
+        //     {
+        //         role: "system",
+        //         content: "You are an assistant, and your name is Jarvis."// If you don't know the answer, then do not give an incorrect answer. If you are sure, then only give the answer.
+        //     },
+        //     {
+        //         role: "user",
+        //         content: input
+        //     }
+        // ]
     });
     // const response = await ai.models.generateContent({
     //     model : "gemini-3.5-flash",
