@@ -22,7 +22,7 @@ const ai = new GoogleGenAI({
 
 async function getResponse(input) {
     const response = await ai.interactions.create({
-        model : "gemini-3.5-flash",
+        model : "gemini-4-hydrogen",
         input : input
         // input : [
         //     {
